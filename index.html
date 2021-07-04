@@ -62,6 +62,8 @@
     const w = canton.clientWidth
     const h = canton.clientHeight
 
+    const MARGIN = 5
+
     // Initial position is a little bit off from the corner so it doesn't get stuck
     let x = 1
     let y = 1
@@ -84,13 +86,13 @@
       canton.style.transform = `translate(${x}px, ${y}px)`
 
       // Hit left or right edge
-      if (x <= 0 || x + w >= W) {
+      if (x + MARGIN <= 0 || x + w - MARGIN >= W) {
         vx *= -1
         cantonBg.style.fill = randomColor()
       }
 
       // Hit top or bottom edge
-      if (y <= 0 || y + h >= H) {
+      if (y + MARGIN <= 0 || y + h - MARGIN >= H) {
         vy *= -1
         cantonBg.style.fill = randomColor()
       }
