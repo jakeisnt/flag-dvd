@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #flag {
+      --height: 400px;
+      --width: calc(var(--height) * 1.9);
+
+      width: var(--width);
+      height: var(--height);
+      background: repeating-linear-gradient(
+        #BF0A30,
+        #BF0A30 calc(100% / 13),
+        #FFFFFF calc(100% / 13),
+        #FFFFFF calc(100% / 13 * 2)
+      );
+      margin: 70px;
+    }
+
+    svg {
+      height: calc(100% * 7 / 13);
+      width: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="flag">
+    <svg width="2964" height="2100" viewBox="0 0 2964 2100" id="canton">
+      <rect width="2964" height="2100" fill="#3c3b6e" id="canton-bg"/>
+      <g fill="#fff">
+      <g id="s18">
+      <g id="s9">
+      <g id="s5">
+      <g id="s4">
+      <path id="s" d="M247,90 317.534230,307.082039 132.873218,172.917961H361.126782L176.465770,307.082039z"/>
+      <use xlink:href="#s" y="420"/>
+      <use xlink:href="#s" y="840"/>
+      <use xlink:href="#s" y="1260"/>
+      </g>
+      <use xlink:href="#s" y="1680"/>
+      </g>
+      <use xlink:href="#s4" x="247" y="210"/>
+      </g>
+      <use xlink:href="#s9" x="494"/>
+      </g>
+      <use xlink:href="#s18" x="988"/>
+      <use xlink:href="#s9" x="1976"/>
+      <use xlink:href="#s5" x="2470"/>
+      </g>
+    </svg>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.6.1/randomColor.js"></script>
+  <script>
+    const flag = document.getElementById('flag')
+    const canton = document.getElementById('canton')
+    const cantonBg = document.getElementById('canton-bg')
+
+    const W = flag.clientWidth
+    const H = flag.clientHeight
+
+    const w = canton.clientWidth
+    const h = canton.clientHeight
+
+    const MARGIN = 5
+
+    // Initial position is a little bit off from the corner so it doesn't get stuck
+    let x = 1
+    let y = 1
+
+    // Velocity empirically derived to be "pretty nice"
+    let vx = 0.08
+    let vy = 0.08
+
+    // Compute the new position based on the amount of time between the current frame and the last.
+    // This makes the speed of the animation constant regardless of the frame rate of the device.
+    // See https://gameprogrammingpatterns.com/game-loop.html
+    let prev
+
+    function frame(timestamp) {
+      let dt = timestamp - prev
+
+      // Compute new position, clamped so the canton doesn't leave the flag
+      x = Math.max(0, Math.min(W - w, x + dt * vx))
+      y = Math.max(0, Math.min(H - h, y + dt * vy))
+      canton.style.transform = `translate(${x}px, ${y}px)`
+
+      // Hit left or right edge
+      if (x + MARGIN <= 0 || x + w - MARGIN >= W) {
+        vx *= -1
+        cantonBg.style.fill = randomColor()
+      }
+
+      // Hit top or bottom edge
+      if (y + MARGIN <= 0 || y + h - MARGIN >= H) {
+        vy *= -1
+        cantonBg.style.fill = randomColor()
+      }
+
+      prev = timestamp
+      window.requestAnimationFrame(frame)
+    }
+
+    // Wait for 1 second for dramatic effect
+    window.setTimeout(
+      function() {
+        prev = performance.now()
+        window.requestAnimationFrame(frame)
+      },
+      1000
+    )
+  </script>
+</body>
+</html>
