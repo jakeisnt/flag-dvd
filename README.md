@@ -1,3 +1,3 @@
-https://flag.jacob.chvatal.com/
+https://flags.jacob.chvatal.com/
 
 flag but hopeless
